@@ -6,6 +6,6 @@
 export default {
   name: 'ViewWorkout',
   components: {},
-  setup() {},
-};
+  setup () {}
+}
 </script>

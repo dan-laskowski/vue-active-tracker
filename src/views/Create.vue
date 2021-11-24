@@ -6,6 +6,6 @@
 export default {
   name: 'Create',
   components: {},
-  setup() {},
-};
+  setup () {}
+}
 </script>
