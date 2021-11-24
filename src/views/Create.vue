@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: 'Create',
+  name: "Create",
   components: {},
-  setup () {}
-}
+  setup() {},
+};
 </script>

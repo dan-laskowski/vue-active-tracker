@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Register',
-  setup () {}
-}
+  name: "Register",
+  setup() {},
+};
 </script>

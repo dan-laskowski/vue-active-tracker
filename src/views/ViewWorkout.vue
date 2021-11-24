@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: 'ViewWorkout',
+  name: "ViewWorkout",
   components: {},
-  setup () {}
-}
+  setup() {},
+};
 </script>
