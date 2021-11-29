@@ -1,7 +1,10 @@
 <template>
   <div class="max-w-screen-md mx-auto px-4 py-10">
     <!--- Status message -->
-    <div v-if="statusMsg" class="mb-10 p-4 bg-light-grey rounded-md">
+    <div
+      v-if="statusMsg || errorMsg"
+      class="mb-10 p-4 bg-light-grey rounded-md"
+    >
       <p class="text-at-light-green">{{ statusMsg }}</p>
       <p class="text-red-500">{{ errorMsg }}</p>
     </div>
@@ -31,6 +34,7 @@
             >Workout Type</label
           >
           <select
+            @change="workoutChange"
             class="p-2 text-gray-500 focus:outline-none"
             name="workout-type"
             id="workout-type"
@@ -99,12 +103,14 @@
               />
             </div>
             <img
+              @click="deleteExercise(item.id)"
               class="h-4 w-auto absolute -left-5 cursor-pointer"
               src="../assets/images/trash-light-green.png"
               alt=""
             />
           </div>
           <button
+            @click="addExercise"
             type="button"
             class="
               mt-6
@@ -185,12 +191,14 @@
               />
             </div>
             <img
+              @click="deleteExercise(item.id)"
               class="h-4 w-auto absolute -left-5 cursor-pointer"
               src="../assets/images/trash-light-green.png"
               alt=""
             />
           </div>
           <button
+            @click="addExercise"
             type="button"
             class="
               mt-6
@@ -234,6 +242,7 @@
 
 <script>
 import { ref } from "vue";
+import { uid } from "uid";
 
 export default {
   name: "Create",
@@ -241,10 +250,59 @@ export default {
   setup() {
     const workoutName = ref("");
     const workoutType = ref("select-workout");
-    const exercises = ref([1]);
+    const exercises = ref([]);
     const statusMsg = ref(null);
     const errorMsg = ref(null);
-    return { workoutName, workoutType, exercises, statusMsg, errorMsg };
+
+    const addExercise = () => {
+      if (workoutType.value === "strength") {
+        exercises.value.push({
+          id: uid(),
+          exercises: "",
+          sets: "",
+          reps: "",
+          weight: "",
+        });
+        return;
+      }
+      exercises.value.push({
+        id: uid(),
+        cardioType: "",
+        distance: "",
+        duration: "",
+        pace: "",
+      });
+    };
+
+    const deleteExercise = (id) => {
+      if (exercises.value.length > 1) {
+        exercises.value = exercises.value.filter(
+          (exercise) => exercise.id !== id
+        );
+        return;
+      }
+      errorMsg.value =
+        "Error: Cannot remove, need to at least have one exercise";
+      setTimeout(() => {
+        errorMsg.value = false;
+      }, 5000);
+    };
+
+    const workoutChange = () => {
+      exercises.value = [];
+      addExercise();
+    };
+
+    return {
+      workoutName,
+      workoutType,
+      exercises,
+      statusMsg,
+      errorMsg,
+      addExercise,
+      workoutChange,
+      deleteExercise,
+    };
   },
 };
 </script>
