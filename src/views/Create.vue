@@ -153,8 +153,8 @@
                 v-model="item.cardioType"
               >
                 <option value="#" disabled>Select Type</option>
-                <option value="run" disabled>Run</option>
-                <option value="walk" disabled>Walk</option>
+                <option value="run">Run</option>
+                <option value="walk">Walk</option>
               </select>
             </div>
 
