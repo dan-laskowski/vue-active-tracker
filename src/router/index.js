@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { supabase } from "../supabase/init";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -12,6 +13,7 @@ const routes = [
     component: Home,
     meta: {
       title: "Your trainings",
+      auth: false,
     },
   },
   {
@@ -20,6 +22,7 @@ const routes = [
     component: Login,
     meta: {
       title: "Login to your account",
+      auth: false,
     },
   },
   {
@@ -28,6 +31,7 @@ const routes = [
     component: Register,
     meta: {
       title: "Register your account",
+      auth: false,
     },
   },
   {
@@ -36,6 +40,7 @@ const routes = [
     component: Create,
     meta: {
       title: "Create new training",
+      auth: true,
     },
   },
   {
@@ -44,6 +49,7 @@ const routes = [
     component: ViewWorkout,
     meta: {
       title: "View workout",
+      auth: false,
     },
   },
 ];
@@ -55,6 +61,18 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Activity Tracker`;
+  next();
+});
+
+router.beforeEach((to, from, next) => {
+  const user = supabase.auth.user();
+  if (to.matched.some((res) => res.meta.auth)) {
+    if (user) {
+      next();
+      return;
+    }
+    next({ name: "Login" });
+  }
   next();
 });
 
