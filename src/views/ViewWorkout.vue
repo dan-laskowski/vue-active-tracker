@@ -61,6 +61,7 @@
             "
           >
             <img
+              @click="deleteWorkout"
               class="h-3.5 w-auto"
               src="../assets/images/trash-light.png"
               alt=""
@@ -317,7 +318,7 @@
 <script>
 import { ref, computed } from "vue";
 import { supabase } from "../supabase/init";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store/index";
 export default {
   name: "ViewWorkout",
@@ -329,7 +330,7 @@ export default {
     const statusMsg = ref(null);
     const route = useRoute();
     const user = computed(() => store.state.user);
-
+    const router = useRouter();
     const currentId = route.params.workoutId;
 
     const getData = async () => {
@@ -349,6 +350,22 @@ export default {
       }
     };
 
+    const deleteWorkout = async () => {
+      try {
+        const { error } = await supabase
+          .from("workouts")
+          .delete()
+          .eq("id", currentId);
+        if (error) throw error;
+        router.push({ name: "Home" });
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = false;
+        }, 5000);
+      }
+    };
+
     const edit = ref(null);
 
     const editMode = () => {
@@ -357,7 +374,7 @@ export default {
 
     getData();
 
-    return { data, dataLoaded, statusMsg, edit, editMode, user };
+    return { data, dataLoaded, statusMsg, edit, editMode, user, deleteWorkout };
   },
 };
 </script>
